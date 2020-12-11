@@ -1,12 +1,12 @@
 import os
 import json
 from kafka import KafkaConsumer, KafkaProducer
-from inference import inference
+from prediction import predict
 
 KAFKA_BOOTSTRAP_SERVER = os.getenv('KAFKA_BROKER_LIST') or 'modh-demo-kafka-bootstrap:9092'
 CONSUMER_GROUP = 'object-detection-consumer-group'
 CONSUMER_TOPIC = os.getenv('KAFKA_TOPIC_IMAGES') or 'images'
-PRODUCER_TOPIC = os.getenv('KAFKA_TOPIC_OBJECTS') or 'object-detection'
+PRODUCER_TOPIC = os.getenv('KAFKA_TOPIC_OBJECTS') or 'objects'
 
 
 def main():
@@ -29,8 +29,8 @@ def main():
         for record in consumer:
             msg = record.value.decode('utf-8')
             dict = json.loads(msg)
-            result = inference(dict)
-            dict['detections'] = result
+            result = predict(dict)
+            dict['prediction'] = result
             producer.send(PRODUCER_TOPIC, json.dumps(dict).encode('utf-8'))
             producer.flush()
     finally:

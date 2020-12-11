@@ -1,0 +1,5 @@
+kafka-python
+tensorflow
+matplotlib
+six
+numpy
