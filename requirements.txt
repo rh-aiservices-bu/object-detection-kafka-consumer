@@ -3,3 +3,4 @@ tensorflow
 matplotlib
 six
 numpy
+boto3
