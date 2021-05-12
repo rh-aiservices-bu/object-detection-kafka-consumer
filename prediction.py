@@ -29,7 +29,8 @@ def detect(img):
 
 def clean_detections(detections):
     cleaned = []
-    num_detections = detections['num_detections']
+    max_boxes = 10
+    num_detections = min(detections['num_detections'], max_boxes)
 
     for i in range(0, num_detections):
         d = {
@@ -44,4 +45,5 @@ def clean_detections(detections):
             'score': detections['detection_scores'][i],
         }
         cleaned.append(d)
+
     return cleaned
