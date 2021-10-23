@@ -1,6 +1,8 @@
+## Application specific 
 kafka-python
+
+## Data Science libraries
 tensorflow
 matplotlib
-six
 numpy
 boto3
