@@ -1,7 +1,10 @@
 import os
 import json
+
 from kafka import KafkaConsumer, KafkaProducer
+
 from prediction import predict
+
 
 KAFKA_BOOTSTRAP_SERVER = os.getenv('KAFKA_BOOTSTRAP_SERVER')
 KAFKA_SECURITY_PROTOCOL = os.getenv('KAFKA_SECURITY_PROTOCOL')
@@ -41,7 +44,9 @@ def main():
                              request_timeout_ms=450000,
                              acks='all')
 
-    print(f'Subscribed to "{KAFKA_BOOTSTRAP_SERVER}" consuming topic "{KAFKA_CONSUMER_TOPIC}, producing messages on topic "{KAFKA_PRODUCER_TOPIC}"...')
+    print(f'Subscribed to "{KAFKA_BOOTSTRAP_SERVER}" consuming topic '
+          f'"{KAFKA_CONSUMER_TOPIC}, producing messages on topic '
+          f'"{KAFKA_PRODUCER_TOPIC}"...')
 
     try:
         for record in consumer:
@@ -49,7 +54,9 @@ def main():
             dict = json.loads(msg)
             result = predict(dict)
             dict['prediction'] = result
-            producer.send(KAFKA_PRODUCER_TOPIC, json.dumps(dict).encode('utf-8'))
+            producer.send(
+                KAFKA_PRODUCER_TOPIC, json.dumps(dict).encode('utf-8')
+            )
             producer.flush()
     finally:
         print("Closing KafkaTransformer...")
